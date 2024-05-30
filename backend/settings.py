@@ -13,6 +13,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = config('DEBUG', default=False, cast=bool)
 SECRET_KEY = config('SECRET_KEY')
 
+TOKEN_MODEL = None
+
 # SECURITY WARNING: don't run with debug turned on in production!
 if DEBUG:
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
@@ -81,6 +83,8 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 SITE_ID = 1
 
+
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -92,10 +96,10 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'cloudinary',
     'corsheaders',
-    'rest_framework',
+    'rest_framework',    
     'rest_framework_simplejwt.token_blacklist',
     'django_filters',
-    'dj_rest_auth',
+    'dj_rest_auth',    
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
