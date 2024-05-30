@@ -32,11 +32,10 @@ The objective of this backend is to provide a robust and secure API for managing
 ## Class Diagram
 
 <details>
-    <summary>Click to see Class Diagram</summary>
-
-    <img src="readmecontent/images/classdiagram/ClassdiaGram.png">
-
+    <summary>Click to see Class Diagram</summary>    
+  <img src="readmecontent/images/classdiagram/ClassdiaGram.png" alt="Classdiagram">
 </details>
+
 
 ## Features
 
