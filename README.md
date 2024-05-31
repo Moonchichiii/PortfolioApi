@@ -80,7 +80,17 @@ The objective of this backend is to provide a robust and secure API for managing
 | 2           | User Login                        | 1. Navigate to "/api/auth/login".<br>2. Submit login form. | User is authenticated and JWT token is issued.    | Works         |
 | 3           | Add Portfolio Item                | 1. Navigate to "/api/portfolio/".<br>2. Submit new portfolio item. | New item is added to the portfolio.               | Works         |
 
+
+
+***Postman Endpoints testing***: 
+
+
+<img src="readmecontent/tests/endpointtesting.png" alt="Postman endpoint testing">
+
+
 </details>
+
+
 
 ## Technologies Used
 

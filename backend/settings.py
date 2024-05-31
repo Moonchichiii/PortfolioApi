@@ -114,6 +114,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     'dj_rest_auth.registration',
     'django_rest_passwordreset', 
+    
+    'profiles',
+    'portfolio',
 ]
 
 MIDDLEWARE = [
