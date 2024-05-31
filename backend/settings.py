@@ -13,9 +13,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = config('DEBUG', default=False, cast=bool)
 SECRET_KEY = config('SECRET_KEY')
 
-TOKEN_MODEL = None
-
 # SECURITY WARNING: don't run with debug turned on in production!
+
 if DEBUG:
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
     CORS_ALLOWED_ORIGINS = ['http://localhost:5173']
@@ -30,6 +29,9 @@ SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_HTTPONLY = not DEBUG
 
+# JWT Settings 
+REST_USE_JWT = True
+REST_SESSION_LOGIN = True 
 JWT_AUTH_COOKIE = 'jwt_access_token'
 JWT_REFRESH_AUTH_COOKIE = 'jwt_refresh_token'
 JWT_AUTH_COOKIE_SECURE = not DEBUG
@@ -45,14 +47,16 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
-
+# Site ID 
+SITE_ID = 1
+# Rest Framework Settings
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
@@ -64,6 +68,7 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'anon': '100/day',
         'user': '1000/day',
+        'dj_rest_auth': '10/minute',
     },
 }
 
@@ -73,18 +78,19 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # Email settings Amazon SES
+ACCOUNT_EMAIL_VERIFICATION = 'none'  
+ACCOUNT_EMAIL_REQUIRED = False  
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_PORT = config('EMAIL_PORT', cast=int)
+EMAIL_HOST = config('EMAIL_HOST')  
+EMAIL_PORT = config('EMAIL_PORT', cast=int)  
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-
-
+EMAIL_USE_SSL = False  
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')  
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')  
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 SITE_ID = 1
-
-
-
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -96,15 +102,18 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'cloudinary',
     'corsheaders',
-    'rest_framework',    
+    'rest_framework',
+    'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
     'django_filters',
-    'dj_rest_auth',    
+    'dj_rest_auth',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
+    'dj_rest_auth.registration',
+    'django_rest_passwordreset', 
 ]
 
 MIDDLEWARE = [
@@ -116,6 +125,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
