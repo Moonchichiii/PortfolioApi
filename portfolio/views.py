@@ -2,7 +2,6 @@ from rest_framework import generics, permissions
 from .models import PortfolioItem
 from .serializers import PortfolioItemSerializer
 
-
 # Create your views here.
 
 class PortfolioItemListCreateView(generics.ListCreateAPIView):
