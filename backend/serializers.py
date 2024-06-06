@@ -17,15 +17,19 @@ class LoginSerializer(serializers.Serializer):
         email = attrs.get('email')
         password = attrs.get('password')
 
-        if email and password:
+        if not password:
+            raise serializers.ValidationError('Password is required.')
+
+        if email:
             user = self.authenticate(email=email, password=password)
-        elif username and password:
+            if not user:
+                raise serializers.ValidationError('Invalid email or password.')
+        elif username:
             user = self.authenticate(username=username, password=password)
+            if not user:
+                raise serializers.ValidationError('Invalid username or password.')
         else:
             raise serializers.ValidationError('Must include either "username" or "email" and "password".')
-
-        if not user:
-            raise serializers.ValidationError('Unable to log in with provided credentials.')
 
         if not user.is_active:
             raise serializers.ValidationError('User account is disabled.')
@@ -58,4 +62,3 @@ class CustomRegisterSerializer(RegisterSerializer):
             'last_name': self.validated_data.get('last_name', ''),
         })
         return data
-

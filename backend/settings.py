@@ -36,6 +36,7 @@ JWT_AUTH_COOKIE = 'jwt_access_token'
 JWT_REFRESH_AUTH_COOKIE = 'jwt_refresh_token'
 JWT_AUTH_COOKIE_SECURE = not DEBUG
 JWT_AUTH_COOKIE_HTTP_ONLY = not DEBUG
+JWT_AUTH_COOKIE_SAMESITE = not DEBUG #'Lax'
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
@@ -47,8 +48,12 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
+
+
 # Site ID 
-SITE_ID = 1
+# SITE_ID = 1
+
+
 # Rest Framework Settings
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
@@ -90,7 +95,8 @@ EMAIL_USE_SSL = False
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')  
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')  
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
-SITE_ID = 1
+
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -113,7 +119,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
     'dj_rest_auth.registration',
-    'django_rest_passwordreset', 
+    'django_rest_passwordreset',
+    'channels', 
     
     'profiles',
     'portfolio',
@@ -211,6 +218,18 @@ CLOUDINARY_STORAGE = {
 # SECURE_BROWSER_XSS_FILTER = True
 # SECURE_CONTENT_TYPE_NOSNIFF = True
 # X_FRAME_OPTIONS = 'DENY'
+
+
+ASGI_APPLICATION = 'backend.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

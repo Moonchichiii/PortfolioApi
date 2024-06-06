@@ -4,7 +4,8 @@ from django.urls import path, include
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from dj_rest_auth.registration.views import SocialLoginView
-from .views import JWTLoginView, JWTLogoutView, JWTRegisterView
+from .views import JWTLoginView, JWTLogoutView, JWTRegisterView, UserDetailsView
+from profiles.views import ProfileDetailView
 
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
@@ -21,11 +22,10 @@ urlpatterns = [
     path('api/auth/social/facebook/', FacebookLogin.as_view(), name='facebook_login'),
     path('api/auth/password/reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
     path('api/auth/password/reset/confirm/', include('dj_rest_auth.urls')),
-    
-    path('', include('profiles.urls')),
-    path('', include('portfolio.urls')),
+    path('api/auth/user/', UserDetailsView.as_view(), name='user_details'),  
+    path('api/profiles/', ProfileDetailView.as_view(), name='profile_detail'),
+    path('api/portfolio/', include('portfolio.urls')),
 ]
-
 
 if settings.REST_USE_JWT:
     from rest_framework_simplejwt.views import TokenVerifyView
