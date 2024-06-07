@@ -1,10 +1,11 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenVerifyView, TokenRefreshView
-from .views import JWTLoginView, JWTRegisterView, JWTLogoutView, UserDetailsView
+from .views import JWTLoginView, JWTRegisterView, JWTLogoutView, UserDetailsView, RootView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', RootView.as_view(), name='root'),  
     path('api/auth/register/', JWTRegisterView.as_view(), name='register'),
     path('api/auth/login/', JWTLoginView.as_view(), name='login'),
     path('api/auth/logout/', JWTLogoutView.as_view(), name='logout'),
@@ -13,4 +14,5 @@ urlpatterns = [
     path('api/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/profiles/', include('profiles.urls')),
     path('api/portfolio/', include('portfolio.urls')),
+    
 ]
