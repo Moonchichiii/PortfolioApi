@@ -6,6 +6,7 @@ from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from dj_rest_auth.registration.views import SocialLoginView
 from .views import JWTLoginView, JWTLogoutView, JWTRegisterView, UserDetailsView
 from profiles.views import ProfileDetailView
+from rest_framework_simplejwt.views import TokenVerifyView, TokenRefreshView
 
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
@@ -28,10 +29,7 @@ urlpatterns = [
 ]
 
 if settings.REST_USE_JWT:
-    from rest_framework_simplejwt.views import TokenVerifyView
-    from dj_rest_auth.jwt_auth import get_refresh_view
-
     urlpatterns += [
         path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-        path('api/token/refresh/', get_refresh_view().as_view(), name='token_refresh'),
+        path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     ]
