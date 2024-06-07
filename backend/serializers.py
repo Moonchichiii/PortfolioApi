@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
 
 User = get_user_model()
@@ -42,7 +42,7 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(style={'input_type': 'password'})
 
     def authenticate(self, **kwargs):
-        return authenticate(self.context['request'], **kwargs)
+        return authenticate(**kwargs)
 
     def validate(self, attrs):
         username = attrs.get('username')
@@ -53,11 +53,11 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError('Password is required.')
 
         if email:
-            user = self.authenticate(email=email, password=password)
+            user = self.authenticate(request=self.context.get('request'), email=email, password=password)
             if not user:
                 raise serializers.ValidationError('Invalid email or password.')
         elif username:
-            user = self.authenticate(username=username, password=password)
+            user = self.authenticate(request=self.context.get('request'), username=username, password=password)
             if not user:
                 raise serializers.ValidationError('Invalid username or password.')
         else:
