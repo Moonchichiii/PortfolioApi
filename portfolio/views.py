@@ -1,22 +1,21 @@
-from rest_framework import generics, permissions
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 from .models import PortfolioItem
 from .serializers import PortfolioItemSerializer
 
-# Create your views here.
-
 class PortfolioItemListCreateView(generics.ListCreateAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     serializer_class = PortfolioItemSerializer
 
     def get_queryset(self):
-        return PortfolioItem.objects.filter(user=self.request.user)
+        return PortfolioItem.objects.filter(profile=self.request.user.profile)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(profile=self.request.user.profile)
 
 class PortfolioItemDetailView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     serializer_class = PortfolioItemSerializer
 
     def get_queryset(self):
-        return PortfolioItem.objects.filter(user=self.request.user)
+        return PortfolioItem.objects.filter(profile=self.request.user.profile)
