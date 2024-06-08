@@ -76,10 +76,6 @@ AUTHENTICATION_BACKENDS = [
 # X_FRAME_OPTIONS = 'DENY'
 
 # Email settings Amazon SES
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-ACCOUNT_EMAIL_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'username'
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT', cast=int)
@@ -88,6 +84,15 @@ EMAIL_USE_SSL = False
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
+
+
+# settings
+DJANGO_REST_MULTITOKENAUTH_RESET = {
+    'RESET_EMAIL_SUBJECT': config('RESET_EMAIL_SUBJECT'),
+    'RESET_EMAIL_PLAIN': config('RESET_EMAIL_PLAIN'),
+    'RESET_EMAIL_HTML': config('RESET_EMAIL_HTML'),
+}
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -99,14 +104,16 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'cloudinary',
     'corsheaders',
-    'rest_framework',
+    'rest_framework',     
+    'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
-    'django_filters',
     'django_rest_passwordreset',
+    'django_filters',
     'channels',
     'profiles',
     'portfolio',
 ]
+
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -139,14 +146,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-DATABASES = {'default': dj_database_url.config(default=config('DATABASE_URL'))}
+#DATABASES = {'default': dj_database_url.config(default=config('DATABASE_URL'))}
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+     'default': {
+         'ENGINE': 'django.db.backends.sqlite3',
+         'NAME': BASE_DIR / 'db.sqlite3',
+     }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -174,8 +181,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
+STORAGES = {
+    'default': {
+        'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'cloudinary_storage.storage.StaticHashedCloudinaryStorage',
+    },
+}
+
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
@@ -187,7 +201,7 @@ ASGI_APPLICATION = 'backend.asgi.application'
 
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',  
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
     },
 }
 

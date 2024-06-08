@@ -36,7 +36,6 @@ The objective of this backend is to provide a robust and secure API for managing
   <img src="readmecontent/images/classdiagram/ClassdiaGram.png" alt="Classdiagram">
 </details>
 
-
 ## Features
 
 - User authentication with JWT and social logins.
@@ -57,7 +56,8 @@ The objective of this backend is to provide a robust and secure API for managing
 - `/api/auth/social/facebook/` - Facebook login
 
 ### Profile
-- `/api/profile/` - Retrieve and update user profile
+- `/api/profiles/` - Retrieve and update user profile
+- `/api/profiles/:id/` - Retrieve, update, and delete a specific user profile
 
 ### Portfolio
 - `/api/portfolio/` - List, create, update, and delete portfolio items
@@ -71,6 +71,25 @@ The objective of this backend is to provide a robust and secure API for managing
 
 - Models, views, and serializers have comprehensive unit tests to ensure robustness.
 
+### Test Coverage
+
+We use `pytest` along with `pytest-cov` to ensure our codebase is well-tested. Below are the coverage results:
+
+#### Backend Module Coverage:
+- **Statements:** 211
+- **Missed Statements:** 34
+- **Coverage:** 84%
+
+#### Profiles Module Coverage:
+- **Statements:** 82
+- **Missed Statements:** 0
+- **Coverage:** 100%
+
+#### Portfolio Module Coverage:
+- **Statements:** 51
+- **Missed Statements:** 2
+- **Coverage:** 96%
+
 <details>
   <summary>Click to view Manual Tests</summary>
 
@@ -80,17 +99,11 @@ The objective of this backend is to provide a robust and secure API for managing
 | 2           | User Login                        | 1. Navigate to "/api/auth/login".<br>2. Submit login form. | User is authenticated and JWT token is issued.    | Works         |
 | 3           | Add Portfolio Item                | 1. Navigate to "/api/portfolio/".<br>2. Submit new portfolio item. | New item is added to the portfolio.               | Works         |
 
-
-
 ***Postman Endpoints testing***: 
-
 
 <img src="readmecontent/tests/endpointtesting.png" alt="Postman endpoint testing">
 
-
 </details>
-
-
 
 ## Technologies Used
 

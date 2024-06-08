@@ -6,9 +6,9 @@ from rest_framework import status, permissions
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.http import JsonResponse
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.http import JsonResponse
 from .serializers import RegisterSerializer, LoginSerializer, UserDetailsSerializer, JWTSerializer
 
 User = get_user_model()
@@ -92,8 +92,6 @@ class UserDetailsView(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         serializer = self.serializer_class(request.user)
         return Response(serializer.data)
-
-
 
 class RootView(APIView):
     permission_classes = [AllowAny]

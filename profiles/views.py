@@ -1,20 +1,12 @@
-from rest_framework import generics, permissions
+from rest_framework import generics
 from .models import Profile
-from .serializers import ProfileSerializer, UserSerializer
-from django.contrib.auth import get_user_model
+from .serializers import ProfileSerializer
 
-User = get_user_model()
-
-class ProfileDetailView(generics.RetrieveUpdateAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+class ProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-
-    def get_object(self):
-        return self.request.user.profile
+    lookup_field = 'pk'
 
 class OnlineUsersListView(generics.ListAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = UserSerializer
-
-    def get_queryset(self):
-        return User.objects.filter(profile__is_online=True)
+    queryset = Profile.objects.filter(is_online=True)
+    serializer_class = ProfileSerializer

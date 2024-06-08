@@ -5,16 +5,10 @@ from .models import Profile
 User = get_user_model()
 
 class ProfileSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     username = serializers.CharField(source='user.username', read_only=True)
     email = serializers.EmailField(source='user.email', read_only=True)
 
     class Meta:
         model = Profile
-        fields = ['username', 'email', 'bio', 'avatar', 'location', 'is_online']
-
-class UserSerializer(serializers.ModelSerializer):
-    profile = ProfileSerializer()
-
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'profile']
+        fields = ['id', 'user', 'username', 'email', 'bio', 'avatar', 'location', 'is_online']
