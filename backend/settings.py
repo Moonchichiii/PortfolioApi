@@ -10,7 +10,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 if DEBUG:
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+    ALLOWED_HOSTS = ['portfolioapi24.herokuapp.com', 'localhost', '127.0.0.1']
     CORS_ALLOWED_ORIGINS = ['http://localhost:5173']
     CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']
 else:
