@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenVerifyView, TokenRefreshView
 from django_rest_passwordreset.views import reset_password_request_token, reset_password_confirm
-
 from .views import JWTLoginView, JWTRegisterView, JWTLogoutView, UserDetailsView, RootView
 
 urlpatterns = [
@@ -19,4 +18,5 @@ urlpatterns = [
     path('password_reset/confirm/', reset_password_confirm, name='password_reset_confirm'),
     path('api/profiles/', include('profiles.urls')),
     path('api/portfolio/', include('portfolio.urls')),
+    path('api/chat/', include('chat.urls')),  
 ]
