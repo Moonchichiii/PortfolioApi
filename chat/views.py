@@ -2,13 +2,16 @@ from django.http import JsonResponse
 from django.views import View
 import openai
 from decouple import config
-from django.middleware.csrf import get_token
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 # Create your views here.
 
 
+# Set OpenAI API key
 openai.api_key = config('OPENAI_API_KEY')
 
+@method_decorator(csrf_exempt, name='dispatch')
 class ChatBotView(View):
     def post(self, request, *args, **kwargs):
         try:
@@ -22,3 +25,7 @@ class ChatBotView(View):
             return JsonResponse({'response': response.choices[0].message['content'].strip()})
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
+
+def get_csrf_token(request):
+    from django.middleware.csrf import get_token
+    return JsonResponse({'csrfToken': get_token(request)})

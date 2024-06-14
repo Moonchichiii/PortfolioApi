@@ -11,8 +11,8 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 if DEBUG:
     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-    CORS_ALLOWED_ORIGINS = ['http://localhost:5173']
-    CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']
+    CORS_ALLOWED_ORIGINS = ['http://localhost:5174']
+    CSRF_TRUSTED_ORIGINS = ['http://localhost:5174']
 else:
     ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
     CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS').split(',')
