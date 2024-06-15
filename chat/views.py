@@ -4,11 +4,11 @@ import openai
 from decouple import config
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.middleware.csrf import get_token
 
-# Create your views here.
+# Create your views here
 
 
-# Set OpenAI API key
 openai.api_key = config('OPENAI_API_KEY')
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -27,5 +27,4 @@ class ChatBotView(View):
             return JsonResponse({'error': str(e)}, status=500)
 
 def get_csrf_token(request):
-    from django.middleware.csrf import get_token
     return JsonResponse({'csrfToken': get_token(request)})
