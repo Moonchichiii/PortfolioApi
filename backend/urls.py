@@ -18,5 +18,6 @@ urlpatterns = [
     path('password_reset/confirm/', reset_password_confirm, name='password_reset_confirm'),
     path('api/profiles/', include('profiles.urls')),
     path('api/portfolio/', include('portfolio.urls')),
-    path('api/chat/', include('chat.urls')),  
+    path('api/chat/', include('chat.urls')),
+    path('api/livechat/', include('livechat.urls')),
 ]

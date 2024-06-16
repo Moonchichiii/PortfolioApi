@@ -14,7 +14,3 @@ class ProfileMeView(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user.profile
-
-class OnlineUsersListView(generics.ListAPIView):
-    queryset = Profile.objects.filter(is_online=True)
-    serializer_class = ProfileSerializer

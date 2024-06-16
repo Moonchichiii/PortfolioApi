@@ -3,12 +3,10 @@ from decouple import config
 from datetime import timedelta
 import dj_database_url
 import os
-import urllib.parse as urlparse
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY')
-
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 if DEBUG:
@@ -25,9 +23,8 @@ SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_HTTPONLY = not DEBUG
 
-# JWT Settings
 REST_USE_JWT = True
-REST_SESSION_LOGIN = True 
+REST_SESSION_LOGIN = True
 JWT_AUTH_COOKIE = 'jwt_access_token'
 JWT_REFRESH_AUTH_COOKIE = 'jwt_refresh_token'
 JWT_AUTH_COOKIE_SECURE = not DEBUG
@@ -45,7 +42,6 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
 
-# Rest Framework Settings
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
@@ -71,13 +67,11 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-# For production settings
 SECURE_SSL_REDIRECT = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
 
-# Email settings Amazon SES
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT', cast=int)
@@ -97,7 +91,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cloudinary',
     'corsheaders',
-    'rest_framework',     
+    'rest_framework',    
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'django_rest_passwordreset',
@@ -106,6 +100,7 @@ INSTALLED_APPS = [
     'profiles',
     'portfolio',
     'chat',
+    'livechat',
 ]
 
 MIDDLEWARE = [
@@ -138,42 +133,21 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
+ASGI_APPLICATION = 'backend.asgi.application'
 
 DATABASES = {'default': dj_database_url.config(default=config('DATABASE_URL'))}
 
-# OpenAI API Key
-OPENAI_API_KEY = config('OPENAI_API_KEY')
-
-#DATABASES = {
-#      'default': {
-#          'ENGINE': 'django.db.backends.sqlite3',
-#          'NAME': BASE_DIR / 'db.sqlite3',
-#      }
-# }
-
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
-
 
 if DEBUG:
     STATIC_URL = '/static/'
@@ -184,7 +158,6 @@ if DEBUG:
 else:
     STATIC_URL = '/static/'
     MEDIA_URL = '/media/'
-
     STORAGES = {
         'default': {
             'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
@@ -193,18 +166,14 @@ else:
             'BACKEND': 'cloudinary_storage.storage.StaticHashedCloudinaryStorage',
         },
     }
-
     CLOUDINARY_STORAGE = {
         'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
         'API_KEY': config('CLOUDINARY_API_KEY'),
         'API_SECRET': config('CLOUDINARY_API_SECRET'),
     }
 
-ASGI_APPLICATION = 'backend.asgi.application'
-
-# Redis Cloud Configuration
+# Redis Configuration
 redis_url = config('REDIS_URL', default='redis://127.0.0.1:6379/1')
-
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
@@ -214,7 +183,6 @@ CACHES = {
         }
     }
 }
-
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
