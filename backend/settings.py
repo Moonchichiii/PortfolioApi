@@ -3,6 +3,7 @@ from decouple import config
 from datetime import timedelta
 import dj_database_url
 import os
+import urllib.parse as urlparse
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -71,10 +72,10 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # For production settings
-# SECURE_SSL_REDIRECT = True
-# SECURE_BROWSER_XSS_FILTER = True
-# SECURE_CONTENT_TYPE_NOSNIFF = True
-# X_FRAME_OPTIONS = 'DENY'
+SECURE_SSL_REDIRECT = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
 
 # Email settings Amazon SES
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -200,11 +201,25 @@ else:
     }
 
 ASGI_APPLICATION = 'backend.asgi.application'
+
+# Redis Cloud Configuration
+redis_url = config('REDIS_URL', default='redis://127.0.0.1:6379/1')
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': redis_url,
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [("redis://localhost:6379")],
+            "hosts": [redis_url],
         },
     },
 }
