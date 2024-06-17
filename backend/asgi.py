@@ -1,15 +1,18 @@
-from channels.auth import AuthMiddlewareStack
-from channels.routing import ProtocolTypeRouter, URLRouter
-from django.core.asgi import get_asgi_application
-import livechat.routing
 import os
+import django
+from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.auth import AuthMiddlewareStack
+import livechat.routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 
-django_asgi_app = get_asgi_application()
+# Ensure Django is ready before initializing the ASGI application
+django.setup()
+
+from django.core.asgi import get_asgi_application
 
 application = ProtocolTypeRouter({
-    "http": django_asgi_app,
+    "http": get_asgi_application(),
     "websocket": AuthMiddlewareStack(
         URLRouter(
             livechat.routing.websocket_urlpatterns
