@@ -3,8 +3,6 @@ from decouple import config
 from datetime import timedelta
 import dj_database_url
 import os
-from redis import Redis
-redis_client = Redis.from_url(os.getenv('REDIS_URL'))
 
 # Define the base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,10 +25,6 @@ CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_HTTPONLY = not DEBUG
-#SECURE_SSL_REDIRECT = not DEBUG
-#SECURE_BROWSER_XSS_FILTER = True
-#SECURE_CONTENT_TYPE_NOSNIFF = True
-#X_FRAME_OPTIONS = 'DENY'
 
 # JWT settings
 REST_USE_JWT = True
@@ -191,7 +185,8 @@ else:
     }
 
 # Redis configuration
-redis_url = config('REDIS_URL', default='redis://127.0.0.1:6379/1')
+redis_url = config('REDIS_URL')
+
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
@@ -201,6 +196,7 @@ CACHES = {
         }
     }
 }
+
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',

@@ -1,13 +1,11 @@
-import json
 import asyncio
+import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from .models import ChatRoom, ChatMessage
-from django.contrib.auth.models import User
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        await self.accept()
-        await asyncio.sleep(4) 
+        await asyncio.sleep(1)  
         if not self.scope['user'].is_authenticated:
             await self.close()
             return
@@ -20,6 +18,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
+        await self.accept()
+
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
             self.room_group_name,
@@ -31,8 +31,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = data['message']
         user = self.scope['user']
 
-        room = await ChatRoom.objects.get(name=self.room_name)
-        await ChatMessage.objects.create(room=room, user=user, message=message)
+        room = await ChatRoom.objects.aget(name=self.room_name)
+        await ChatMessage.objects.acreate(room=room, user=user, message=message)
 
         await self.channel_layer.group_send(
             self.room_group_name,
