@@ -1,15 +1,19 @@
-# settings.py
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
 import dj_database_url
 import os
 
+# Define the base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Secret key for the application
 SECRET_KEY = config('SECRET_KEY')
+
+# Debug mode configuration
 DEBUG = config('DEBUG', default=False, cast=bool)
 
+# Allowed hosts configuration
 if DEBUG:
     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
     CORS_ALLOWED_ORIGINS = ['http://localhost:5174']
@@ -19,11 +23,13 @@ else:
     CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS').split(',')
     CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS').split(',')
 
+# CORS and CSRF settings
 CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_HTTPONLY = not DEBUG
 
+# JWT settings
 REST_USE_JWT = True
 REST_SESSION_LOGIN = True
 JWT_AUTH_COOKIE = 'jwt_access_token'
@@ -32,6 +38,7 @@ JWT_AUTH_COOKIE_SECURE = not DEBUG
 JWT_AUTH_COOKIE_HTTP_ONLY = not DEBUG
 JWT_AUTH_COOKIE_SAMESITE = 'Lax'
 
+# Simple JWT configuration
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
@@ -43,6 +50,7 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
 
+# Django REST framework settings
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
@@ -64,15 +72,18 @@ REST_FRAMEWORK = {
     },
 }
 
+# Authentication backends
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+# Security settings
 SECURE_SSL_REDIRECT = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
 
+# Email backend configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT', cast=int)
@@ -82,6 +93,7 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
+# Installed apps
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -104,6 +116,7 @@ INSTALLED_APPS = [
     'livechat',
 ]
 
+# Middleware configuration
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -115,8 +128,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# URL configuration
 ROOT_URLCONF = 'backend.urls'
 
+# Template settings
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -133,11 +148,14 @@ TEMPLATES = [
     },
 ]
 
+# WSGI and ASGI applications
 WSGI_APPLICATION = 'backend.wsgi.application'
 ASGI_APPLICATION = 'backend.asgi.application'
 
+# Database configuration
 DATABASES = {'default': dj_database_url.config(default=config('DATABASE_URL'))}
 
+# Password validation settings
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -145,11 +163,13 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# Localization settings
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
+# Static and media files settings
 if DEBUG:
     STATIC_URL = '/static/'
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -173,6 +193,7 @@ else:
         'API_SECRET': config('CLOUDINARY_API_SECRET'),
     }
 
+# Redis configuration
 redis_url = config('REDIS_URL', default='redis://127.0.0.1:6379/1')
 CACHES = {
     'default': {
@@ -192,4 +213,5 @@ CHANNEL_LAYERS = {
     },
 }
 
+# Default auto field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
