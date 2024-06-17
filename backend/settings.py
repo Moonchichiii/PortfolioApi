@@ -9,14 +9,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-if DEBUG:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-    CORS_ALLOWED_ORIGINS = ['http://localhost:5174']
-    CSRF_TRUSTED_ORIGINS = ['http://localhost:5174']
-else:
-    ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
-    CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS').split(',')
-    CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS').split(',')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='').split(',')
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='').split(',')
 
 CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_SECURE = not DEBUG
@@ -67,7 +62,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = not DEBUG
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
