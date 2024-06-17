@@ -184,4 +184,3 @@ else:
 
 # Default auto field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
