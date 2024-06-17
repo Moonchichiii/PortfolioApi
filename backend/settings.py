@@ -174,6 +174,7 @@ else:
 
 # Redis Configuration
 redis_url = config('REDIS_URL', default='redis://127.0.0.1:6379/1')
+
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
@@ -187,7 +188,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [redis_url],
+            "hosts": [config('REDIS_URL')],
         },
     },
 }
