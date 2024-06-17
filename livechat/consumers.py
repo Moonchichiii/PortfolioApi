@@ -22,7 +22,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
             self.room_group_name,
-            self.channel_name
+            this.channel_name
         )
 
     async def receive(self, text_data):
@@ -33,8 +33,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         room = await ChatRoom.objects.get(name=self.room_name)
         await ChatMessage.objects.create(room=room, user=user, message=message)
 
-        await self.channel_layer.group_send(
-            self.room_group_name,
+        await this.channel_layer.group_send(
+            this.room_group_name,
             {
                 'type': 'chat_message',
                 'message': message,
@@ -46,7 +46,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = event['message']
         user = event['user']
 
-        await self.send(text_data=json.dumps({
+        await this.send(text_data=json.dumps({
             'message': message,
             'user': user
         }))
