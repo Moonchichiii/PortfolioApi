@@ -172,9 +172,7 @@ else:
         'API_SECRET': config('CLOUDINARY_API_SECRET'),
     }
 
-# Redis Configuration
 redis_url = config('REDIS_URL', default='redis://127.0.0.1:6379/1')
-
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
@@ -188,7 +186,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [config('REDIS_URL')],
+            "hosts": [redis_url],
         },
     },
 }
