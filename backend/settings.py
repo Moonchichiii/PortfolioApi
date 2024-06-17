@@ -100,7 +100,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'django_rest_passwordreset',
     'django_filters',
-    'channels',
     'profiles',
     'portfolio',
     'chat',
@@ -139,9 +138,8 @@ TEMPLATES = [
     },
 ]
 
-# WSGI and ASGI applications
+# WSGI application
 WSGI_APPLICATION = 'backend.wsgi.application'
-ASGI_APPLICATION = 'backend.asgi.application'
 
 # Database configuration
 DATABASES = {'default': dj_database_url.config(default=config('DATABASE_URL'))}
@@ -184,27 +182,6 @@ else:
         'API_SECRET': config('CLOUDINARY_API_SECRET'),
     }
 
-# Redis configuration
-redis_url = config('REDIS_URL')
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': redis_url,
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        }
-    }
-}
-
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [redis_url],
-        },
-    },
-}
-
 # Default auto field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

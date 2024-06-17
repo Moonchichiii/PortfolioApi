@@ -1,21 +1,21 @@
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from .models import ChatRoom, ChatMessage
-from rest_framework import generics
-from rest_framework import permissions
+from rest_framework import generics, permissions
+from .models import ChatMessage, ChatRoom
+from .serializers import ChatMessageSerializer
 from profiles.models import Profile
 from profiles.serializers import ProfileSerializer
 
-# Create your views here.
+class ChatMessageListCreateView(generics.ListCreateAPIView):
+    serializer_class = ChatMessageSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    def get_queryset(self):
+        room_name = self.kwargs['room_name']
+        return ChatMessage.objects.filter(room__name=room_name).order_by('-timestamp')
 
-@login_required
-def chat_room(request, room_name):
-    room, created = ChatRoom.objects.get_or_create(name=room_name)
-    messages = room.messages.order_by('-timestamp')[:20]  
-    return render(request, 'chat/room.html', {'room': room, 'messages': messages})
-
-
+    def perform_create(self, serializer):
+        room_name = self.kwargs['room_name']
+        room, created = ChatRoom.objects.get_or_create(name=room_name)
+        serializer.save(user=self.request.user, room=room)
 
 class OnlineUsersListView(generics.ListAPIView):
     queryset = Profile.objects.filter(is_online=True)
