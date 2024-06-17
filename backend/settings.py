@@ -3,6 +3,8 @@ from decouple import config
 from datetime import timedelta
 import dj_database_url
 import os
+from redis import Redis
+redis_client = Redis.from_url(os.getenv('REDIS_URL'))
 
 # Define the base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -14,20 +16,21 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 # Allowed hosts configuration
-if DEBUG:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-    CORS_ALLOWED_ORIGINS = ['http://localhost:5174']
-    CSRF_TRUSTED_ORIGINS = ['http://localhost:5174']
-else:
-    ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
-    CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS').split(',')
-    CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS').split(',')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 
 # CORS and CSRF settings
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS').split(',')
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS').split(',')
 CORS_ALLOW_CREDENTIALS = True
+
+# Security settings
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_HTTPONLY = not DEBUG
+SECURE_SSL_REDIRECT = not DEBUG
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
 
 # JWT settings
 REST_USE_JWT = True
@@ -77,12 +80,6 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-# Security settings
-SECURE_SSL_REDIRECT = True
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'
-
 # Email backend configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = config('EMAIL_HOST')
@@ -104,7 +101,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cloudinary',
     'corsheaders',
-    'rest_framework',    
+    'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'django_rest_passwordreset',
