@@ -15,7 +15,8 @@ class PortfolioItemListCreateView(generics.ListCreateAPIView):
     serializer_class = PortfolioItemSerializer
 
     def get_queryset(self):
-        return PortfolioItemSerializer.Meta.model.objects.filter(profile=self.request.user.profile)
+        # Order the queryset by a specific field, e.g., 'created_at' or 'id'
+        return PortfolioItem.objects.filter(profile=self.request.user.profile).order_by('id')
 
     def perform_create(self, serializer):
         serializer.save(profile=self.request.user.profile)
@@ -28,4 +29,5 @@ class PortfolioItemDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PortfolioItemSerializer
 
     def get_queryset(self):
-        return PortfolioItemSerializer.Meta.model.objects.filter(profile=self.request.user.profile)
+        # Order the queryset by a specific field, e.g., 'created_at' or 'id'
+        return PortfolioItem.objects.filter(profile=self.request.user.profile).order_by('id')
