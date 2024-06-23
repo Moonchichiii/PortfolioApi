@@ -70,7 +70,7 @@ class JWTRegisterView(APIView):
             'refresh_token': refresh_token,
         }
 
-        response = Response(response_data, status=status.HTTP_201_CREATED)
+        response = Response(JWTSerializer(response_data).data, status=status.HTTP_201_CREATED)
         response.set_cookie(settings.JWT_AUTH_COOKIE, access_token, httponly=True, secure=settings.JWT_AUTH_COOKIE_SECURE, samesite='Lax')
         response.set_cookie(settings.JWT_REFRESH_AUTH_COOKIE, refresh_token, httponly=True, secure=settings.JWT_AUTH_COOKIE_SECURE, samesite='Lax')
         return response
@@ -98,7 +98,7 @@ class RootView(APIView):
 
     def get(self, request, *args, **kwargs):
         data = {
-            "message": "Welcome to the API. Use the endpoints below for authentication:",
+            "message": "Welcome to the API",
             "endpoints": {
                 "login": "/api/auth/login/",
                 "register": "/api/auth/register/",
