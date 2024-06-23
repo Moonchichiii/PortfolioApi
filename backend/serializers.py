@@ -1,16 +1,7 @@
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
-from profiles.models import Profile
 
 User = get_user_model()
-
-class ProfileSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(source='user.username', read_only=True)
-    email = serializers.EmailField(source='user.email', read_only=True)
-
-    class Meta:
-        model = Profile
-        fields = ['id', 'username', 'email', 'bio', 'avatar', 'location', 'is_online']
 
 class RegisterSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(write_only=True)
@@ -43,7 +34,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             first_name=validated_data.get('first_name', ''),
             last_name=validated_data.get('last_name', '')
         )
-        Profile.objects.create(user=user)  # Create a profile for the user
         return user
 
 class LoginSerializer(serializers.Serializer):
@@ -80,11 +70,9 @@ class LoginSerializer(serializers.Serializer):
         return attrs
 
 class UserDetailsSerializer(serializers.ModelSerializer):
-    profile = ProfileSerializer()
-
     class Meta:
         model = User
-        fields = ('pk', 'username', 'email', 'first_name', 'last_name', 'profile')
+        fields = ('pk', 'username', 'email', 'first_name', 'last_name')
 
 class JWTSerializer(serializers.Serializer):
     access_token = serializers.CharField()
